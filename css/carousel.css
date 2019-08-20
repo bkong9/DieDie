@@ -1,0 +1,9 @@
+.carousel {
+    margin: auto;
+    overflow: hidden;
+}
+
+.carousel-inner img {
+  	height: 90vh;
+  	max-width: 100%;
+}
