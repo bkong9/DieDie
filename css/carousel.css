@@ -4,6 +4,18 @@
 }
 
 .carousel-inner img {
-  	height: 100%;
+  	height: 90vh;
   	width: 100%;
+}
+
+@media(max-width:768px){
+
+  .carousel {
+  	margin: auto;
+  }
+
+  .carousel-inner img {
+    height: 90vh;
+    object-fit: cover;
+  }
 }
