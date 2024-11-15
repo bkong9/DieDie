@@ -1,67 +1,84 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Meng Photography - Nature</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Meng Photography - Nature</title>
 
-		<!-- bootstrap css -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 
-		<!-- lightbox css -->
-		<link rel="stylesheet" type="text/css" href="css/lightbox.css">
+    <!-- lightbox css -->
+    <link rel="stylesheet" type="text/css" href="css/lightbox.css">
 
     <!-- my css -->
-    <link rel="stylesheet" type="text/css" href="css/style.css">    
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
-		<!-- bootstrap js script requirements -->
-		<script
+    <!-- bootstrap js script requirements -->
+    <script
         src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
         crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
 
     <!-- disable context menu (right click) -->
     <script type="text/javascript">document.addEventListener('contextmenu', event => event.preventDefault());</script>
 
-		<!-- lightbox js -->
-		<script type="text/javascript" src="js/lightbox-plus-jquery.js"></script>
+    <!-- lightbox js -->
+    <script type="text/javascript" src="js/lightbox-plus-jquery.js"></script>
 
-		<!-- lightbox options -->
-		<script>
-    	lightbox.option({
-    		'imageFadeDuration': 500,
-    		'resizeDuration': 500,
-    		'fitImagesInViewport': true
-    	})
-		</script>
+    <!-- lightbox options -->
+    <script>
+      lightbox.option({
+        'imageFadeDuration': 500,
+        'resizeDuration': 500,
+        'fitImagesInViewport': true
+      })
+    </script>
 
     <!-- nature_nav import -->
     <script>
       $(function(){
-        $("#includedContent").load("nature_nav.html"); 
+        $("#includedContent").load("nature_nav.html");
       });
     </script>
-	</head>
 
-	<body>
+  </head>
+
+  <body>
     <a name="top"></a>
 
-		<!-- header navbar -->
+    <!-- header navbar -->
     <div id="includedContent"></div>
 
-  	<!-- image gallery -->
-  	<div class="container-fluid">
+    <!-- image gallery -->
+    <div class="container-fluid">
 
       <!-- row 1 -->
       <div class="row">
+        <div class="col-sm">
+          <figure class="figure">
+            <a href="albums/wintercanadianrockies.html"><img src="pics/WinterCanadianRockies/WCR_-_27.jpg" height=100% width=100%></a>
+            <figcaption class="figure-caption text-center"><a href="albums/wintercanadianrockies.html" style="color: #777777;">Winter in the Canadian Rockies</a></figcaption>
+          </figure>
+        </div>
+        <div class="col-sm">
+          <figure class="figure">
+            <a href="albums/americagreatlakes.html"><img src="pics/2024-07-America-Great-Lakes/Lakes_6.jpg" height=100% width=100%></a>
+            <figcaption class="figure-caption text-center"><a href="albums/americagreatlakes.html" style="color: #777777;">2024/07 - American Great Lakes</a></figcaption>
+          </figure>
+        </div>
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/china2018.html"><img src="pics/2018-China/China-1.jpg" height=100% width=100%></a>
             <figcaption class="figure-caption text-center"><a href="albums/china2018.html" style="color: #777777;">China</a></figcaption>
           </figure>
         </div>
+      </div>
+
+      <!-- row 2 -->
+      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/ontariofall.html"><img src="pics/2018-10-OntarioFall/Fall13.jpg" height=100% width=100%></a>
@@ -74,16 +91,16 @@
             <figcaption class="figure-caption text-center"><a href="albums/quebec2.html" style="color: #777777;">2019/10 - Quebec</a></figcaption>
           </figure>
         </div>
-      </div>
-
-      <!-- row 2 -->
-      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/tanzania_animal.html"><img src="pics/2019-06-Tanzania-Animal/TA1.jpg" height=100% width=100%></a>
             <figcaption class="figure-caption text-center"><a href="albums/tanzania_animal.html" style="color: #777777;">2019/06 - Tanzania Wildlife</a></figcaption>
           </figure>
         </div>
+      </div>
+
+      <!-- row 3 -->
+      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/tanzania_landscape.html"><img src="pics/2019-06-Tanzania-Landscape/TL5.jpg" height=100% width=100%></a>
@@ -96,16 +113,16 @@
             <figcaption class="figure-caption text-center"><a href="albums/canadaroadtrip.html" style="color: #777777;">2018/07 - Canada Roadtrip</a></figcaption>
           </figure>
         </div>
-      </div>
-
-      <!-- row 3 -->
-      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/usroadtrip.html"><img src="pics/2018-06-USRoadtrip/USRoadtrip1.jpg" height=100% width=100%></a>
             <figcaption class="figure-caption text-center"><a href="albums/usroadtrip.html" style="color: #777777;">2018/06 - US Roadtrip</a></figcaption>
           </figure>
         </div>
+      </div>
+
+      <!-- row 4 -->
+      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/antarctic.html"><img src="pics/2018-03-Antarctic/Antarctica-1.jpg" height=100% width=100%></a>
@@ -118,26 +135,10 @@
             <figcaption class="figure-caption text-center"><a href="albums/argentina.html" style="color: #777777;">2018/02 - Argentina</a></figcaption>
           </figure>
         </div>
-      </div>
-
-      <!-- row 4 -->
-      <div class="row">
         <div class="col-sm">
           <figure class="figure">
             <a href="albums/iceland.html"><img src="pics/2017-11-Iceland/Iceland-1.jpg" height=100% width=100%></a>
             <figcaption class="figure-caption text-center"><a href="albums/iceland.html" style="color: #777777;">2017/11 - Iceland</a></figcaption>
-          </figure>
-        </div>
-        <div class="col-sm">
-          <figure class="figure">
-            <a href="albums/quebec.html"><img src="pics/2017-10-QuebecFall/Quebec-7.jpg" height=100% width=100%></a>
-            <figcaption class="figure-caption text-center"><a href="albums/quebec.html" style="color: #777777;">2017/10 - Quebec Fall</a></figcaption>
-          </figure>
-        </div>
-        <div class="col-sm">
-          <figure class="figure">
-            <a href="albums/newfoundland.html"><img src="pics/2017-07-Newfoundland/Newfoundland-14.jpg" height=100% width=100%></a>
-            <figcaption class="figure-caption text-center"><a href="albums/newfoundland.html" style="color: #777777;">2017/07 - Newfoundland</a></figcaption>
           </figure>
         </div>
     </div>
@@ -146,22 +147,39 @@
     <div class="row">
       <div class="col-sm">
         <figure class="figure">
+          <a href="albums/quebec.html"><img src="pics/2017-10-QuebecFall/Quebec-7.jpg" height=100% width=100%></a>
+          <figcaption class="figure-caption text-center"><a href="albums/quebec.html" style="color: #777777;">2017/10 - Quebec Fall</a></figcaption>
+        </figure>
+      </div>
+      <div class="col-sm">
+        <figure class="figure">
+          <a href="albums/newfoundland.html"><img src="pics/2017-07-Newfoundland/Newfoundland-14.jpg" height=100% width=100%></a>
+          <figcaption class="figure-caption text-center"><a href="albums/newfoundland.html" style="color: #777777;">2017/07 - Newfoundland</a></figcaption>
+        </figure>
+      </div>
+      <div class="col-sm">
+        <figure class="figure">
           <a href="albums/yukon.html"><img src="pics/2016-09-Yukon/Yukon-1.jpg" height=100% width=100%></a>
           <figcaption class="figure-caption text-center"><a href="albums/yukon.html" style="color: #777777;">2016/09 - Yukon</a></figcaption>
         </figure>
       </div>
+    </div>
+
+    <!-- row 6 -->
+    <div class="row">
       <div class="col-sm">
-          <figure class="figure">
-            <a href="albums/alberta.html"><img src="pics/2015-07-Alberta/Alberta-1.jpg" height=100% width=100%></a>
-            <figcaption class="figure-caption text-center"><a href="albums/alberta.html" style="color: #777777;">2015/07 - Alberta</a></figcaption>
-          </figure>
-        </div>
-        <div class="col-sm">
-           <figure class="figure">
-            <a href="albums/misc_nature.html"><img src="pics/2016-02-Yellowknife/Yellowknife.jpg" height=100% width=100%></a>
-            <figcaption class="figure-caption text-center"><a href="albums/misc_nature.html" style="color: #777777;">Misc. Nature Collection</a></figcaption>
-          </figure>
+        <figure class="figure">
+          <a href="albums/alberta.html"><img src="pics/2015-07-Alberta/Alberta-1.jpg" height=100% width=100%></a>
+          <figcaption class="figure-caption text-center"><a href="albums/alberta.html" style="color: #777777;">2015/07 - Alberta</a></figcaption>
+        </figure>
       </div>
+      <div class="col-sm">
+         <figure class="figure">
+          <a href="albums/misc_nature.html"><img src="pics/2016-02-Yellowknife/Yellowknife.jpg" height=100% width=100%></a>
+          <figcaption class="figure-caption text-center"><a href="albums/misc_nature.html" style="color: #777777;">Misc. Nature Collection</a></figcaption>
+        </figure>
+      </div>
+      <div class="col-sm"></div>
     </div>
 
     <!-- footer -->
@@ -169,6 +187,6 @@
       <a href="#top"><p style="color:#808080; text-align: center">Back to Top</p></a>
     </div>
 
-	</body>
+  </body>
 
 </html>
