@@ -26,49 +26,19 @@
     <!-- disable context menu (right click) -->
     <script type="text/javascript">document.addEventListener('contextmenu', event => event.preventDefault());</script>
 
+    <!-- nature_nav import -->
+    <script>
+      $(function(){
+        $("#includedContent").load("nature_nav_CHN.html");
+      });
+    </script>
+
   </head>
 
   <body>
+
     <!-- header navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light py-0" style="background-color: #f5f5f5,">
-      <div class="navbar-collapse collapse w-100 dual-collapse2 order-1 order-md-0" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto" style="margin-top: 10px;">
-            <li class="nav-item">
-              <a class="nav-link" href="http://weibo.com/cabutterfly" style="padding-left: 30px;"><img src="pics/Logos/weibologo.png" height=24 width=24></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.instagram.com/mengphoto" style="padding-left: 30px;"><img src="pics/Logos/instalogo.png" height=24 width=24></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.youtube.com/channel/UC5XBwBHZl0wAtP9xLyeCeyw" style="padding-left: 30px;"><img src="pics/Logos/youtubelogo.png" height=24 width=24></a>
-            </li>
-          </ul>
-      </div>
-      <div class="mx-auto order-0">
-          <a class="navbar-brand mx-auto" href="index_CHN.html"><img src="pics/Logos/website_banner.png" height=126 width=300></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      </div>
-      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                  <a class="nav-link" href="index_CHN.html" style="padding-right: 30px;">主页</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="about_CHN.html" style="padding-right: 30px;">自我介绍</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-right: 30px;">相册</a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="urban_CHN.html">都市</a>
-                  <a class="dropdown-item" href="nature_CHN.html">自然</a>
-                  <a class="dropdown-item" href="commercial_CHN.html">商业</a>
-                </div>
-              </li>
-          </ul>
-      </div>
-    </nav>
+    <div id="includedContent"></div>
 
     <!-- homepage carousel -->
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
