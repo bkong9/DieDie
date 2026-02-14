@@ -1,90 +1,272 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Meng Photography - Journal</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meng Photography - Journal: Breath with the Rainforest</title>
 
-		<!-- bootstrap css -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
 
-		<!-- lightbox css -->
-		<link rel="stylesheet" type="text/css" href="css/lightbox.css">
+    <script>document.addEventListener('contextmenu', function (e) { e.preventDefault(); });</script>
+    <style>
+      .journal-book {
+        max-width: 920px;
+        margin: 0 auto;
+      }
+      .journal-book header {
+        margin-bottom: 1.5rem;
+      }
+      .journal-book h1 {
+        font-family: var(--font-serif);
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+      }
+      .journal-book .book-meta {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
 
-    <!-- jvectormap css -->
-    <link rel="stylesheet" type="text/css" href="css/jquery-jvectormap-2.0.3.css">
+      /* Page turn viewer */
+      .book-viewer {
+        position: relative;
+        perspective: 1200px;
+        min-height: 75vh;
+      }
+      .book-spread {
+        position: relative;
+        width: 100%;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .book-page {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease-in-out;
+      }
+      .book-page .page-content {
+        position: relative;
+        width: 100%;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        overflow: hidden;
+        backface-visibility: hidden;
+      }
+      .book-page::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #e8e6e1 0%, #d4d1ca 100%);
+        border-radius: 8px;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        box-shadow: inset 0 0 60px rgba(0,0,0,0.06);
+      }
+      .book-page.turn-out-next {
+        transform: rotateY(-180deg);
+      }
+      .book-page.turn-out-prev {
+        transform: rotateY(180deg);
+      }
+      .book-page.turn-in-next {
+        transform: rotateY(180deg);
+      }
+      .book-page.turn-in-prev {
+        transform: rotateY(-180deg);
+      }
+      .book-page .spread-label {
+        position: absolute;
+        top: 0.75rem;
+        left: 1rem;
+        z-index: 2;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        background: rgba(255,255,255,0.9);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+      }
+      .book-page embed {
+        width: 100%;
+        height: 70vh;
+        min-height: 480px;
+        border: none;
+        display: block;
+      }
 
-		<!-- my css -->
-		<link rel="stylesheet" type="text/css" href="css/carousel.css">
-		<link rel="stylesheet" type="text/css" href="css/style.css">
+      /* Navigation buttons */
+      .book-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .book-nav button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--accent);
+        background: transparent;
+        border: 2px solid var(--accent);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: color 0.2s, background 0.2s, border-color 0.2s;
+      }
+      .book-nav button:hover:not(:disabled) {
+        background: var(--accent);
+        color: #fff;
+      }
+      .book-nav button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .book-nav .page-indicator {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        min-width: 6rem;
+        text-align: center;
+      }
+      .book-nav .pdf-link {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+      .book-nav .pdf-link:hover {
+        color: var(--accent);
+      }
+    </style>
+  </head>
 
-		<!-- bootstrap js script requirements -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="js/bootstrap.js"></script>
+  <body>
+    <div id="includedContent" data-nav="journal_nav.html"></div>
 
-		<!-- lightbox js -->
-		<script type="text/javascript" src="js/lightbox-plus-jquery.js"></script>
+    <main class="container py-4">
+      <article class="journal-book">
+        <header>
+          <h1>Breath with the Rainforest</h1>
+          <p class="book-meta mb-0">A picture book journal</p>
+        </header>
 
-    <!-- jvectormap js -->
-    <script type="text/javascript" src="js/jquery-jvectormap-2.0.3.min.js"></script>
+        <div class="book-viewer">
+          <div class="book-spread">
+            <div class="book-page" id="bookPage" role="region" aria-label="Current page">
+              <div class="page-content">
+                <span class="spread-label" id="spreadLabel">Part 1</span>
+                <embed id="pdfEmbed" src="pics/Journals/Breath%20with%20the%20Rainforest/Breath%20With%20The%20Rainforest-part-1.pdf#toolbar=1" type="application/pdf" title="Part 1" />
+              </div>
+            </div>
+          </div>
+        </div>
 
-		<!-- disable context menu (right click) -->
-		<script type="text/javascript">document.addEventListener('contextmenu', event => event.preventDefault());</script>
+        <nav class="book-nav" aria-label="Journal navigation">
+          <button type="button" id="btnPrev" aria-label="Previous page" disabled>
+            <span aria-hidden="true">←</span> Previous
+          </button>
+          <span class="page-indicator" id="pageIndicator">1 / 16</span>
+          <button type="button" id="btnNext" aria-label="Next page">
+            Next <span aria-hidden="true">→</span>
+          </button>
+          <a class="pdf-link" id="pdfLink" href="pics/Journals/Breath%20with%20the%20Rainforest/Breath%20With%20The%20Rainforest-part-1.pdf" target="_blank" rel="noopener">Open PDF in new tab</a>
+        </nav>
+      </article>
+    </main>
 
-	</head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
+    <script>
+(function () {
+  var BASE = "pics/Journals/Breath%20with%20the%20Rainforest/Breath%20With%20The%20Rainforest-part-";
+  var TOTAL = 16;
+  var page = document.getElementById("bookPage");
+  var embed = document.getElementById("pdfEmbed");
+  var spreadLabel = document.getElementById("spreadLabel");
+  var pageIndicator = document.getElementById("pageIndicator");
+  var pdfLink = document.getElementById("pdfLink");
+  var btnPrev = document.getElementById("btnPrev");
+  var btnNext = document.getElementById("btnNext");
 
-	<body>
-		<!-- header navbar -->
-		<nav class="navbar navbar-expand-lg navbar-light py-0" style="background-color: #f5f5f5,">
-    		<div class="navbar-collapse collapse w-100 dual-collapse2 order-1 order-md-0" id="navbarSupportedContent">
-        		<ul class="navbar-nav mr-auto" style="margin-top: 10px;">
-        			<li class="nav-item">
-        				<a class="nav-link" href="http://weibo.com/cabutterfly" style="padding-left: 30px;"><img src="pics/Logos/weibologo.png" height=24 width=24></a>
-        			</li>
-        			<li class="nav-item">
-        				<a class="nav-link" href="https://www.instagram.com/mengphoto" style="padding-left: 30px;"><img src="pics/Logos/instalogo.png" height=24 width=24></a>
-        			</li>
-        			<li class="nav-item">
-        				<a class="nav-link" href="#" style="padding-left: 30px;"><img src="pics/Logos/youtubelogo.png" height=24 width=24></a>
-        			</li>
-        		</ul>
-    		</div>
-    		<div class="mx-auto order-0">
-        		<a class="navbar-brand mx-auto" href="#"><img src="pics/Logos/logo_black.png" height=65 width=250></a>
-        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-           			<span class="navbar-toggler-icon"></span>
-        		</button>
-    		</div>
-    		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
-        		<ul class="navbar-nav ml-auto">
-        			<li class="nav-item">
-                		<a class="nav-link" href="index.html" style="padding-right: 30px;">Home</a>
-            		</li>
-            		<li class="nav-item">
-                		<a class="nav-link" href="about.html" style="padding-right: 30px;">About</a>
-           			</li>
-           			<li class="nav-item dropdown">
-           				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-right: 30px;">Albums</a>
-           				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-           					<a class="dropdown-item" href="landscapes.html">Landscapes</a>
-           					<a class="dropdown-item" href="#">Portraits</a>
-           					<a class="dropdown-item" href="#">Commercial</a>
-           				</div>
-           			</li>
-					<li class="nav-item active"> <!-- Active -->
-                		<a class="nav-link" href="journal.html" style="padding-right: 30px;">Journal</a>
-           			</li>
-        		</ul>
-    		</div>
-  		</nav>
+  var currentIndex = 0;
 
-      <!-- Vector Map -->
-    <div id="world-map" style="width: 600px; height: 400px"></div>
-      <script>
-        $(function(){
-          $('#world-map').vectorMap({map: 'world_mill'});
-        });
-      </script>
-	</body>
+  function getPdfUrl(n) {
+    return BASE + (n + 1) + ".pdf";
+  }
+
+  function updateUI() {
+    spreadLabel.textContent = "Part " + (currentIndex + 1);
+    pageIndicator.textContent = (currentIndex + 1) + " / " + TOTAL;
+    pdfLink.href = getPdfUrl(currentIndex);
+    btnPrev.disabled = currentIndex === 0;
+    btnNext.disabled = currentIndex === TOTAL - 1;
+  }
+
+  function goNext() {
+    if (currentIndex >= TOTAL - 1) return;
+    page.classList.add("turn-out-next");
+    page.addEventListener("transitionend", function onEnd() {
+      page.removeEventListener("transitionend", onEnd);
+      page.classList.remove("turn-out-next");
+      currentIndex++;
+      embed.src = getPdfUrl(currentIndex) + "#toolbar=1";
+      embed.setAttribute("title", "Part " + (currentIndex + 1));
+      page.style.transform = "rotateY(180deg)";
+      page.offsetHeight;
+      page.classList.add("turn-in-next");
+      page.offsetHeight;
+      page.style.transform = "rotateY(0deg)";
+      page.addEventListener("transitionend", function onIn() {
+        page.removeEventListener("transitionend", onIn);
+        page.classList.remove("turn-in-next");
+        page.style.transform = "";
+        updateUI();
+      }, { once: true });
+    }, { once: true });
+  }
+
+  function goPrev() {
+    if (currentIndex <= 0) return;
+    page.classList.add("turn-out-prev");
+    page.addEventListener("transitionend", function onEnd() {
+      page.removeEventListener("transitionend", onEnd);
+      page.classList.remove("turn-out-prev");
+      currentIndex--;
+      embed.src = getPdfUrl(currentIndex) + "#toolbar=1";
+      embed.setAttribute("title", "Part " + (currentIndex + 1));
+      page.style.transform = "rotateY(-180deg)";
+      page.offsetHeight;
+      page.classList.add("turn-in-prev");
+      page.offsetHeight;
+      page.style.transform = "rotateY(0deg)";
+      page.addEventListener("transitionend", function onIn() {
+        page.removeEventListener("transitionend", onIn);
+        page.classList.remove("turn-in-prev");
+        page.style.transform = "";
+        updateUI();
+      }, { once: true });
+    }, { once: true });
+  }
+
+  btnPrev.addEventListener("click", goPrev);
+  btnNext.addEventListener("click", goNext);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") goPrev();
+    else if (e.key === "ArrowRight") goNext();
+  });
+
+  updateUI();
+})();
+    </script>
+  </body>
 </html>
