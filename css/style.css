@@ -1,36 +1,220 @@
-/* Sticky footer styles
--------------------------------------------------- */
+/* Meng Photography - modern base styles */
+:root {
+  --bg-page: #f8f7f4;
+  --bg-nav: #fff;
+  --text-primary: #1a1a1a;
+  --text-muted: #5c5c5c;
+  --accent: #2d4a3e;
+  --accent-hover: #1e3329;
+  --border: rgba(0, 0, 0, 0.06);
+  --footer-bg: #fff;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --radius: 8px;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Fraunces", "Georgia", serif;
+}
+
 html {
   position: relative;
   min-height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  /* Margin bottom by footer height */
-  background-color: #f5f5f5;
-  margin-bottom: 50px;
+  background-color: var(--bg-page);
+  margin-bottom: 60px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-.navbar {
-  margin-bottom: 10px;
+/* Navbar */
+.site-nav {
+  background-color: var(--bg-nav) !important;
+  box-shadow: var(--shadow);
+  margin-bottom: 0;
 }
 
+.site-nav .navbar-brand img {
+  height: auto;
+  max-height: 80px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+}
+
+.site-nav .nav-link {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.site-nav .nav-link:hover {
+  color: var(--accent) !important;
+}
+
+.site-nav .dropdown-item:hover {
+  background-color: var(--bg-page);
+  color: var(--accent);
+}
+
+.site-nav .nav-link img {
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav .nav-link:hover img {
+  opacity: 1;
+}
+
+@media (min-width: 992px) {
+  .site-nav .navbar-nav {
+    margin-top: 8px;
+  }
+}
+
+/* Footer */
 .footer {
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  height: 50px; /* Set the fixed height of the footer here */
-  line-height: 50px; /* Vertically center the text there */
-  background-color: #ffff;
+  height: 60px;
+  line-height: 60px;
+  background-color: var(--footer-bg);
+  box-shadow: 0 -1px 0 var(--border);
 }
 
 .footer p {
   margin-bottom: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
-.row > .col-sm {
-  padding-right: 0.5px;
-  padding-left: 0.5px;
-  padding-top: 0.5px;
-  padding-bottom: 0.5px;
+.footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer a:hover {
+  color: var(--accent);
+}
+
+/* Gallery grid */
+.row > .col-sm,
+.row > [class*="col-"] {
+  padding: 0.25rem;
+}
+
+.figure {
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--bg-nav);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.figure:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.figure:hover img {
+  transform: scale(1.03);
+}
+
+.figure-caption {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.figure-caption a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.figure-caption a:hover {
+  color: var(--accent);
+}
+
+/* Album gallery thumbnails (lightbox grid) */
+.container-fluid .row .col-sm a {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--bg-nav);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.25s ease;
+}
+.container-fluid .row .col-sm a:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.container-fluid .row .col-sm a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.container-fluid .row .col-sm a:hover img {
+  transform: scale(1.03);
+}
+
+/* Breadcrumb / back links */
+p a[href*=".html"] {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+p a[href*=".html"]:hover {
+  color: var(--accent);
+}
+
+/* Journal map placeholder */
+.journal-map-placeholder {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--border);
+  border-radius: var(--radius);
+}
+
+/* About page */
+.about-content {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 1rem 3rem;
+  text-align: justify;
+}
+
+.about-content img {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.about-content p {
+  line-height: 1.85;
+  margin-bottom: 1rem;
 }
