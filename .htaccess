@@ -1,0 +1,24 @@
+# Extensionless URLs (Apache + mod_rewrite)
+# - /about       → internally serves about.html (address bar stays /about)
+# - /about.html  → 301 redirects to /about
+#
+# If the site runs in a subfolder (e.g. https://example.com/myproject/),
+# set RewriteBase accordingly and uncomment RewriteBase:
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # RewriteBase /myproject/
+
+  # Homepage: normalize index.html URL
+  RewriteRule ^index\.html?$ ./ [R=301,L,QSA,NC]
+
+  # Canonical URLs without .html
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^(.+)\.html$ $1 [R=301,QSA,L,NC]
+
+  # Serve example.html when the request is .../example (no conflicting file/dir)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.*)$ $1.html [L,QSA]
+</IfModule>

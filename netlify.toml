@@ -1,0 +1,6 @@
+# Static export from repo root. In Netlify UI, enable Pretty URLs under
+# Build & deploy → Post processing → Asset optimization → Pretty URLs so
+# /page and /page.html resolve without leaving .html in the address bar.
+
+[build]
+  publish = "."

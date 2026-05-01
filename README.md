@@ -12,7 +12,7 @@ Personal website for Meng Photography.
 The pattern is shown in `albums/alberta.html`. For each other album and `_CHN` page under `albums/`:
 
 1. Replace the `<head>` with Bootstrap 5 + GLightbox CSS + `../css/style.css` (and fonts).
-2. Use `<div id="includedContent" data-nav="album_nav.html" data-base="../"></div>` for the nav.
+2. Use `<div id="includedContent" data-nav="site_nav.html" data-base="../"></div>` for English album pages (`site_nav_CHN.html` for Chinese).
 3. Keep `data-lightbox="…"` on gallery links; `app.js` wires them to GLightbox.
 4. At the end of `<body>`, include: Bootstrap bundle, GLightbox script, then `../js/app.js`.
 5. Replace the footer with the same `<footer class="footer">…</footer>` as in `alberta.html`.

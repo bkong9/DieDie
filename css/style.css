@@ -76,6 +76,33 @@ body {
   }
 }
 
+@media (max-width: 991.98px) {
+  .site-nav .nav-link {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .site-nav #navLeft .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-nav #navLeft .nav-link {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .site-nav #navLeft .nav-link img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+}
+
 /* Footer */
 .footer {
   position: absolute;
@@ -174,6 +201,26 @@ body {
 }
 .container-fluid .row .col-sm a:hover img {
   transform: scale(1.03);
+}
+
+/*
+ * Album lightbox grids: equal height within each row (matches tallest image in that row),
+ * without forcing a global aspect-ratio. Shorter images grow their link to full cell height
+ * so object-fit: cover can crop and remove dead space.
+ */
+body:has(#includedContent[data-nav*="album_nav"]) .container-fluid > .row > .col-sm {
+  display: flex;
+  flex-direction: column;
+}
+
+body:has(#includedContent[data-nav*="album_nav"]) .container-fluid > .row > .col-sm > a[data-lightbox] {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body:has(#includedContent[data-nav*="album_nav"]) .container-fluid > .row > .col-sm > a[data-lightbox] > img {
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Breadcrumb / back links */
