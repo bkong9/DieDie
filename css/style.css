@@ -223,6 +223,13 @@ body:has(#includedContent[data-nav*="album_nav"]) .container-fluid > .row > .col
   object-position: center;
 }
 
+/* Tanzania Landscape last row: TL21 thumb is narrower than TL20/TL19 at the same 800px height,
+ * so at equal column widths it scales taller and dominates row height. Match column boxes to
+ * the wider thumbs (534×800) so all three cells align without extra vertical gap. */
+body:has(#includedContent[data-nav*="album_nav"]) .container-fluid > .row.tanzania-landscape-row-last > .col-sm {
+  aspect-ratio: 534 / 800;
+}
+
 /* Breadcrumb / back links */
 p a[href*=".html"] {
   color: var(--text-muted);

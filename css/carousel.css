@@ -51,10 +51,39 @@
   transform: scale(1.2);
 }
 
+/* Mobile / narrow: fill viewport height (MobileCarousel & picture fallback) */
 @media (max-width: 768px) {
+  .carousel-inner {
+    max-height: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .carousel-inner .carousel-item {
+    max-height: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .carousel-inner .carousel-item > a {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .carousel-inner .carousel-item picture {
+    display: block;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
   .carousel-inner .carousel-item img,
   .carousel-inner .carousel-item picture img {
-    height: 70vh;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
     object-fit: cover;
   }
 }
