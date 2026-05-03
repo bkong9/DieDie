@@ -4,25 +4,40 @@
   overflow: hidden;
 }
 
-.carousel-inner {
-  max-height: 90vh;
-}
-
-.carousel-inner .carousel-item {
-  max-height: 90vh;
-}
-
-.carousel-inner .carousel-item img,
-.carousel-inner .carousel-item picture img {
-  width: 100%;
-  height: 90vh;
-  object-fit: cover;
-  display: block;
-}
-
 .carousel-inner .carousel-item a {
   display: block;
   line-height: 0;
+}
+
+/* Large screens: single fixed hero height for every slide (image uses object-fit: cover) */
+@media (min-width: 769px) {
+  .carousel-inner {
+    position: relative;
+    width: 100%;
+    max-height: none;
+    /* Cap height at 90vh and at 16:9 for viewport width so the box is identical for every slide */
+    height: min(90vh, calc(100vw * 9 / 16));
+  }
+
+  .carousel-inner .carousel-item {
+    max-height: none;
+    height: 100%;
+  }
+
+  .carousel-inner .carousel-item > a,
+  .carousel-inner .carousel-item picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .carousel-inner .carousel-item img,
+  .carousel-inner .carousel-item picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 }
 
 .carousel-control-prev,
@@ -57,12 +72,14 @@
     max-height: none;
     min-height: 100vh;
     min-height: 100dvh;
+    height: auto;
   }
 
   .carousel-inner .carousel-item {
     max-height: none;
     min-height: 100vh;
     min-height: 100dvh;
+    height: auto;
   }
 
   .carousel-inner .carousel-item > a {
