@@ -1,9 +1,9 @@
-﻿<!doctype html>
-<html lang="en">
+<!doctype html>
+<html lang="zh">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meng Photography - Journal: Atacama</title>
+    <title>Meng Photography - 日志：阿塔卡马</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -346,17 +346,17 @@
   </head>
 
   <body>
-    <div id="includedContent" data-nav="index_nav.html"></div>
+    <div id="includedContent" data-nav="index_nav_CHN.html"></div>
 
     <main class="container-fluid journal-main py-4">
       <article class="journal-book">
         <header>
-          <h1>Atacama Journal</h1>
+          <h1>阿塔卡马沙漠日志</h1>
         </header>
 
         <div class="book-viewer">
           <div class="book-spread">
-            <div class="book-stage" id="bookStage" role="region" aria-label="Journal viewer">
+            <div class="book-stage" id="bookStage" role="region" aria-label="日志阅览">
               <!-- Incoming page(s) revealed beneath the leaf -->
               <div class="spread-under" id="spreadUnder" aria-hidden="true">
                 <div class="page-content">
@@ -367,7 +367,7 @@
               <!-- Idle view -->
               <div class="spread-static" id="spreadStatic">
                 <div class="page-content">
-                  <span class="spread-label" id="spreadLabel" aria-live="polite">Pages 1–2</span>
+                  <span class="spread-label" id="spreadLabel" aria-live="polite">第 1–2 页</span>
                   <div class="scrap-spread-inner" data-pane="static"></div>
                 </div>
               </div>
@@ -391,13 +391,13 @@
           </div>
         </div>
 
-        <nav class="book-nav" aria-label="Journal navigation">
-          <button type="button" id="btnPrev" aria-label="Previous page">
-            <span aria-hidden="true">←</span> Previous
+        <nav class="book-nav" aria-label="日志翻页">
+          <button type="button" id="btnPrev" aria-label="上一页">
+            <span aria-hidden="true">←</span> 上一页
           </button>
           <span class="page-indicator" id="pageIndicator">1 / 8</span>
-          <button type="button" id="btnNext" aria-label="Next page">
-            Next <span aria-hidden="true">→</span>
+          <button type="button" id="btnNext" aria-label="下一页">
+            下一页 <span aria-hidden="true">→</span>
           </button>
         </nav>
       </article>
@@ -407,7 +407,7 @@
     <script src="js/app.js"></script>
     <script>
 (function () {
-  var BASE = "pics/Journals/Atacama/Atacama%20Journal%20English_Page_";
+  var BASE = "pics/Journals/Atacama_CHN/Atacama_Desert_Journal_Chinese_Page_";
   var TOTAL_JPEGS = 15;
   var SPREAD_COUNT = Math.ceil(TOTAL_JPEGS / 2);
   var MQ = window.matchMedia("(max-width: 767.98px)");
@@ -473,14 +473,14 @@
     var imgR = pane.imgR;
     var wrapR = pane.wrapR;
     imgL.src = jpegUrl(ln);
-    imgL.alt = "Atacama journal page " + ln;
+    imgL.alt = "阿塔卡马日志第 " + ln + " 页";
     if (rn <= TOTAL_JPEGS) {
       wrapR.classList.remove("scrap-blank");
       var ph = wrapR.querySelector(".scrap-blank-inner");
       if (ph) ph.remove();
       imgR.removeAttribute("hidden");
       imgR.src = jpegUrl(rn);
-      imgR.alt = "Atacama journal page " + rn;
+      imgR.alt = "阿塔卡马日志第 " + rn + " 页";
     } else {
       imgR.removeAttribute("src");
       imgR.setAttribute("hidden", "hidden");
@@ -506,7 +506,7 @@
     imgR.removeAttribute("src");
     imgR.setAttribute("hidden", "hidden");
     imgL.src = jpegUrl(n);
-    imgL.alt = "Atacama journal page " + n;
+    imgL.alt = "阿塔卡马日志第 " + n + " 页";
   }
 
   function fillPane(paneName, view) {
@@ -539,10 +539,10 @@
     if (v.mode === "dual") {
       var lo = leftPageFromSpread(v.spread);
       var hi = Math.min(rightPageFromSpread(v.spread), TOTAL_JPEGS);
-      spreadLabel.textContent = lo === hi ? "Page " + lo : "Pages " + lo + "\u2013" + hi;
+      spreadLabel.textContent = lo === hi ? "\u7b2c " + lo + " \u9875" : "\u7b2c " + lo + "\u2013" + hi + " \u9875";
       pageIndicator.textContent = v.spread + 1 + " / " + SPREAD_COUNT;
     } else {
-      spreadLabel.textContent = "Page " + (v.page + 1);
+      spreadLabel.textContent = "\u7b2c " + (v.page + 1) + " \u9875";
       pageIndicator.textContent = v.page + 1 + " / " + TOTAL_JPEGS;
     }
     btnPrev.disabled = pos <= 0 || busy;
