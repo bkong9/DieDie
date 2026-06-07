@@ -102,6 +102,34 @@
       return;
     }
 
+    // Journal index and individual journal viewers
+    var onJournal =
+      pageKey === 'journals' ||
+      pageKey === 'journals_CHN' ||
+      pageKey.indexOf('journal') === 0;
+
+    if (onJournal) {
+      var pJournal = typeof prefix === 'string' ? prefix : '';
+      container.querySelectorAll('#navRight a.nav-link').forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        if (isExternalOrSpecialUrl(href)) return;
+        href = href.split('?')[0].split('#')[0];
+        if (pJournal && href.indexOf(pJournal) === 0) href = href.slice(pJournal.length);
+        href = href.replace(/^\.\//, '');
+        var linkKey = stripHtmlExt(href);
+        if (
+          linkKey === 'journals' ||
+          linkKey === 'journals_CHN' ||
+          linkKey === 'journal' ||
+          linkKey === 'journal_CHN'
+        ) {
+          var li = a.closest('li.nav-item');
+          if (li) li.classList.add('active');
+        }
+      });
+      return;
+    }
+
     // Match a top-level nav link by its href stem (clean URL or legacy .html)
     var p = typeof prefix === 'string' ? prefix : '';
 
