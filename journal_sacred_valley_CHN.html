@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meng Photography - 日志：圣谷</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>document.addEventListener('contextmenu', function (e) { e.preventDefault(); });</script>
+    <style>
+      .journal-main {
+        max-width: 100%;
+        padding-left: clamp(0.75rem, 2.5vw, 2rem);
+        padding-right: clamp(0.75rem, 2.5vw, 2rem);
+      }
+
+      .journal-book {
+        max-width: min(1680px, 98vw);
+        margin: 0 auto;
+      }
+      .journal-book header {
+        margin-bottom: 1.5rem;
+      }
+      .journal-book h1 {
+        font-family: var(--font-serif);
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+      }
+      .journal-book .book-meta {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .book-viewer {
+        position: relative;
+      }
+
+      .book-stage {
+        display: grid;
+        grid-template: 1fr / 1fr;
+        align-items: stretch;
+        justify-items: stretch;
+        perspective: 2200px;
+        transform-style: preserve-3d;
+      }
+      .book-stage > * {
+        grid-area: 1 / 1;
+      }
+
+      .spread-static {
+        position: relative;
+        z-index: 1;
+        align-self: start;
+        width: 100%;
+      }
+
+      .spread-under {
+        z-index: 0;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.15s ease;
+      }
+      .spread-under.is-visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .flip-leaf {
+        z-index: 2;
+        width: 100%;
+        visibility: hidden;
+        pointer-events: none;
+        transform-style: preserve-3d;
+      }
+      .flip-leaf.is-active {
+        visibility: visible;
+      }
+
+      .flip-leaf__inner {
+        position: relative;
+        width: 100%;
+        min-height: 100%;
+        transform-style: preserve-3d;
+        transform-origin: center center;
+        transition: transform 0.78s cubic-bezier(0.22, 0.82, 0.28, 1);
+      }
+      .flip-leaf.no-motion .flip-leaf__inner {
+        transition: none;
+      }
+
+      .leaf-face {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: preserve-3d;
+      }
+      .leaf-front {
+        transform: rotateY(0deg);
+      }
+      .leaf-back {
+        transform: rotateY(180deg);
+      }
+
+      /* Paper edge shading on the turning sheet */
+      .leaf-face .page-content::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.14) 0%,
+          rgba(0, 0, 0, 0) 18%,
+          rgba(255, 255, 255, 0.12) 50%,
+          rgba(0, 0, 0, 0) 82%,
+          rgba(0, 0, 0, 0.12) 100%
+        );
+        mix-blend-mode: multiply;
+      }
+      .flip-leaf.is-active .leaf-face .page-content::after {
+        opacity: 1;
+      }
+
+      .page-content {
+        position: relative;
+        width: 100%;
+        background: linear-gradient(145deg, #ede8df 0%, #e3ddd3 45%, #d8d0c4 100%);
+        border-radius: 4px;
+        box-shadow:
+          0 2px 0 rgba(255, 255, 255, 0.35) inset,
+          0 12px 40px rgba(0, 0, 0, 0.18),
+          0 1px 0 rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .scrap-spread-inner {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        min-height: 62vh;
+        padding: 0.65rem 0.5rem;
+        gap: 0;
+      }
+
+      @media (min-width: 768px) {
+        .book-stage:not(.book-stage--mobile) .scrap-spread-inner {
+          min-height: min(82vh, 920px);
+          padding: 0.85rem 0.75rem;
+        }
+      }
+
+      .book-stage--mobile .scrap-spread-inner {
+        min-height: min(56vh, 520px);
+      }
+
+      @media (min-width: 768px) {
+        .book-stage:not(.book-stage--mobile) .scrap-gutter {
+          flex: 0 0 18px;
+        }
+      }
+
+      .scrap-gutter {
+        flex: 0 0 14px;
+        background: linear-gradient(90deg,
+          rgba(0, 0, 0, 0.07) 0%,
+          rgba(255, 255, 255, 0.25) 35%,
+          rgba(0, 0, 0, 0.06) 100%);
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.12);
+        margin: 0.35rem 0;
+      }
+
+      .book-stage--mobile .scrap-gutter {
+        display: none;
+      }
+
+      .book-stage--mobile .scrap-page--right {
+        display: none;
+      }
+
+      .book-stage--mobile .scrap-page--left {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+
+      .scrap-page {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem 0.75rem 1.1rem;
+        background: linear-gradient(180deg, #faf8f4 0%, #f3efe8 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+      }
+      .scrap-page::before,
+      .scrap-page::after {
+        content: "";
+        position: absolute;
+        width: 42px;
+        height: 14px;
+        opacity: 0.45;
+        pointer-events: none;
+        z-index: 2;
+        background: repeating-linear-gradient(
+          -35deg,
+          rgba(200, 80, 70, 0.55) 0 4px,
+          rgba(240, 220, 120, 0.5) 4px 8px,
+          rgba(80, 130, 160, 0.45) 8px 12px
+        );
+        border-radius: 2px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      }
+      .scrap-page::before {
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-2deg);
+      }
+      .scrap-page::after {
+        bottom: 12px;
+        right: 14%;
+        transform: rotate(3deg);
+        width: 36px;
+      }
+      .scrap-page img {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        max-height: 68vh;
+        object-fit: contain;
+        border-radius: 2px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+      }
+
+      @media (min-width: 768px) {
+        .book-stage:not(.book-stage--mobile) .scrap-page img {
+          max-height: min(80vh, 1100px);
+        }
+      }
+
+      .book-stage--mobile .scrap-page img {
+        max-height: none;
+      }
+      .scrap-page.scrap-blank {
+        background:
+          repeating-linear-gradient(
+            -12deg,
+            transparent,
+            transparent 11px,
+            rgba(0, 0, 0, 0.03) 11px,
+            rgba(0, 0, 0, 0.03) 12px
+          ),
+          linear-gradient(180deg, #f5f2ec 0%, #ebe6dd 100%);
+      }
+      .scrap-page.scrap-blank::before,
+      .scrap-page.scrap-blank::after {
+        display: none;
+      }
+      .scrap-blank-inner {
+        font-family: var(--font-serif);
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        text-align: center;
+        padding: 1rem;
+        opacity: 0.75;
+      }
+
+      .spread-label {
+        position: absolute;
+        top: 0.55rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        background: rgba(255, 252, 246, 0.92);
+        padding: 0.2rem 0.65rem;
+        border-radius: 3px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+
+      .book-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 0.65rem;
+        flex-wrap: wrap;
+      }
+      .book-nav button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--accent);
+        background: transparent;
+        border: 2px solid var(--accent);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: color 0.2s, background 0.2s, border-color 0.2s;
+      }
+      .book-nav button:hover:not(:disabled) {
+        background: var(--accent);
+        color: #fff;
+      }
+      .book-nav button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .book-nav .page-indicator {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        min-width: 8rem;
+        text-align: center;
+      }
+
+      .journal-book.is-desktop-flipping .book-nav .page-indicator {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="includedContent" data-nav="index_nav_CHN.html"></div>
+
+    <main class="container-fluid journal-main py-4">
+      <article class="journal-book">
+        <header>
+          <h1>圣谷日志</h1>
+        </header>
+
+        <div class="book-viewer">
+          <div class="book-spread">
+            <div class="book-stage" id="bookStage" role="region" aria-label="日志阅览">
+              <!-- Incoming page(s) revealed beneath the leaf -->
+              <div class="spread-under" id="spreadUnder" aria-hidden="true">
+                <div class="page-content">
+                  <div class="scrap-spread-inner" data-pane="under"></div>
+                </div>
+              </div>
+
+              <!-- Idle view -->
+              <div class="spread-static" id="spreadStatic">
+                <div class="page-content">
+                  <span class="spread-label" id="spreadLabel" aria-live="polite">第 1–2 页</span>
+                  <div class="scrap-spread-inner" data-pane="static"></div>
+                </div>
+              </div>
+
+              <!-- Turning sheet: front = outgoing, back = incoming (no blank “reverse”) -->
+              <div class="flip-leaf" id="flipLeaf" aria-hidden="true">
+                <div class="flip-leaf__inner" id="flipInner">
+                  <div class="leaf-face leaf-front">
+                    <div class="page-content">
+                      <div class="scrap-spread-inner" data-pane="flipFront"></div>
+                    </div>
+                  </div>
+                  <div class="leaf-face leaf-back">
+                    <div class="page-content">
+                      <div class="scrap-spread-inner" data-pane="flipBack"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav class="book-nav" aria-label="日志翻页">
+          <button type="button" id="btnPrev" aria-label="上一页">
+            <span aria-hidden="true">←</span> 上一页
+          </button>
+          <span class="page-indicator" id="pageIndicator">1 / 7</span>
+          <button type="button" id="btnNext" aria-label="下一页">
+            下一页 <span aria-hidden="true">→</span>
+          </button>
+        </nav>
+      </article>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
+    <script>
+(function () {
+  var BASE = "pics/Journals/Sacred_Valley_Journal_CHN/Sacred_Valley_Journal_Chinese_Page_";
+  var TOTAL_JPEGS = 14;
+  var SPREAD_COUNT = Math.ceil(TOTAL_JPEGS / 2);
+  var MQ = window.matchMedia("(max-width: 767.98px)");
+
+  var bookStage = document.getElementById("bookStage");
+  var spreadUnder = document.getElementById("spreadUnder");
+  var spreadStatic = document.getElementById("spreadStatic");
+  var flipLeaf = document.getElementById("flipLeaf");
+  var flipInner = document.getElementById("flipInner");
+  var spreadLabel = document.getElementById("spreadLabel");
+  var pageIndicator = document.getElementById("pageIndicator");
+  var btnPrev = document.getElementById("btnPrev");
+  var btnNext = document.getElementById("btnNext");
+  var journalBook = document.querySelector("article.journal-book");
+
+  var panes = {};
+  ["static", "under", "flipFront", "flipBack"].forEach(function (name) {
+    var root = document.querySelector('[data-pane="' + name + '"]');
+    var wrapL = document.createElement("div");
+    wrapL.className = "scrap-page scrap-page--left scrap-left";
+    var imgL = document.createElement("img");
+    imgL.decoding = "async";
+    wrapL.appendChild(imgL);
+    var gutter = document.createElement("div");
+    gutter.className = "scrap-gutter";
+    gutter.setAttribute("aria-hidden", "true");
+    var wrapR = document.createElement("div");
+    wrapR.className = "scrap-page scrap-page--right scrap-right";
+    var imgR = document.createElement("img");
+    imgR.decoding = "async";
+    wrapR.appendChild(imgR);
+    root.appendChild(wrapL);
+    root.appendChild(gutter);
+    root.appendChild(wrapR);
+    panes[name] = { root: root, imgL: imgL, imgR: imgR, wrapR: wrapR };
+  });
+
+  var mobile = MQ.matches;
+  /** Desktop: spread index 0..SPREAD_COUNT-1. Mobile: jpeg index 0..TOTAL_JPEGS-1 */
+  var pos = 0;
+  var busy = false;
+
+  function z2(n) {
+    return n < 10 ? "0" + n : String(n);
+  }
+
+  function jpegUrl(index1Based) {
+    return BASE + z2(index1Based) + ".jpg";
+  }
+
+  function leftPageFromSpread(spread) {
+    return spread * 2 + 1;
+  }
+
+  function rightPageFromSpread(spread) {
+    return spread * 2 + 2;
+  }
+
+  function applyDualPane(pane, spreadIndex) {
+    var ln = leftPageFromSpread(spreadIndex);
+    var rn = rightPageFromSpread(spreadIndex);
+    var imgL = pane.imgL;
+    var imgR = pane.imgR;
+    var wrapR = pane.wrapR;
+    imgL.src = jpegUrl(ln);
+    imgL.alt = "圣谷日志第 " + ln + " 页";
+    if (rn <= TOTAL_JPEGS) {
+      wrapR.classList.remove("scrap-blank");
+      var ph = wrapR.querySelector(".scrap-blank-inner");
+      if (ph) ph.remove();
+      imgR.removeAttribute("hidden");
+      imgR.src = jpegUrl(rn);
+      imgR.alt = "圣谷日志第 " + rn + " 页";
+    } else {
+      imgR.removeAttribute("src");
+      imgR.setAttribute("hidden", "hidden");
+      wrapR.classList.add("scrap-blank");
+      if (!wrapR.querySelector(".scrap-blank-inner")) {
+        var d = document.createElement("div");
+        d.className = "scrap-blank-inner";
+        d.setAttribute("aria-hidden", "true");
+        d.textContent = "\u2014";
+        wrapR.insertBefore(d, imgR);
+      }
+    }
+  }
+
+  function applySinglePane(pane, page0Based) {
+    var n = page0Based + 1;
+    var imgL = pane.imgL;
+    var imgR = pane.imgR;
+    var wrapR = pane.wrapR;
+    wrapR.classList.remove("scrap-blank");
+    var ph = wrapR.querySelector(".scrap-blank-inner");
+    if (ph) ph.remove();
+    imgR.removeAttribute("src");
+    imgR.setAttribute("hidden", "hidden");
+    imgL.src = jpegUrl(n);
+    imgL.alt = "圣谷日志第 " + n + " 页";
+  }
+
+  function fillPane(paneName, view) {
+    var p = panes[paneName];
+    if (!p) return;
+    if (view.mode === "dual") {
+      applyDualPane(p, view.spread);
+    } else {
+      applySinglePane(p, view.page);
+    }
+  }
+
+  function viewFromPos(p) {
+    if (mobile) {
+      return { mode: "single", page: p };
+    }
+    return { mode: "dual", spread: p };
+  }
+
+  function maxPos() {
+    return mobile ? TOTAL_JPEGS - 1 : SPREAD_COUNT - 1;
+  }
+
+  function syncStageClass() {
+    bookStage.classList.toggle("book-stage--mobile", mobile);
+  }
+
+  function updateUI() {
+    var v = viewFromPos(pos);
+    if (v.mode === "dual") {
+      var lo = leftPageFromSpread(v.spread);
+      var hi = Math.min(rightPageFromSpread(v.spread), TOTAL_JPEGS);
+      spreadLabel.textContent = lo === hi ? "\u7b2c " + lo + " \u9875" : "\u7b2c " + lo + "\u2013" + hi + " \u9875";
+      pageIndicator.textContent = v.spread + 1 + " / " + SPREAD_COUNT;
+    } else {
+      spreadLabel.textContent = "\u7b2c " + (v.page + 1) + " \u9875";
+      pageIndicator.textContent = v.page + 1 + " / " + TOTAL_JPEGS;
+    }
+    btnPrev.disabled = pos <= 0 || busy;
+    btnNext.disabled = pos >= maxPos() || busy;
+  }
+
+  function paintStatic() {
+    fillPane("static", viewFromPos(pos));
+  }
+
+  function waitFlipEnd(cb) {
+    function onEnd(e) {
+      if (e.target !== flipInner || e.propertyName !== "transform") return;
+      flipInner.removeEventListener("transitionend", onEnd);
+      cb();
+    }
+    flipInner.addEventListener("transitionend", onEnd);
+  }
+
+  function resetFlipInstant(angle) {
+    flipLeaf.classList.add("no-motion");
+    flipInner.style.transform = "rotateY(" + angle + "deg)";
+    flipInner.offsetHeight;
+    flipLeaf.classList.remove("no-motion");
+  }
+
+  /** Desktop flip only: hinge at spread center (gutter). */
+  function setFlipLeafOriginDesktop() {
+    flipInner.style.transformOrigin = "center center";
+  }
+
+  function goNext() {
+    if (busy || pos >= maxPos()) return;
+    if (mobile) {
+      pos++;
+      paintStatic();
+      updateUI();
+      return;
+    }
+
+    var next = pos + 1;
+    var vCur = viewFromPos(pos);
+    var vNext = viewFromPos(next);
+    busy = true;
+    if (journalBook) journalBook.classList.add("is-desktop-flipping");
+    bookStage.setAttribute("aria-busy", "true");
+    updateUI();
+
+    setFlipLeafOriginDesktop();
+
+    fillPane("under", vNext);
+    spreadUnder.classList.add("is-visible");
+
+    fillPane("flipFront", vCur);
+    fillPane("flipBack", vNext);
+
+    resetFlipInstant(0);
+    flipLeaf.classList.add("is-active");
+    flipLeaf.setAttribute("aria-hidden", "false");
+    flipInner.offsetHeight;
+    flipInner.style.transform = "rotateY(-180deg)";
+
+    waitFlipEnd(function () {
+      pos = next;
+      paintStatic();
+      spreadUnder.classList.remove("is-visible");
+      flipLeaf.classList.remove("is-active");
+      flipLeaf.setAttribute("aria-hidden", "true");
+      resetFlipInstant(0);
+      busy = false;
+      if (journalBook) journalBook.classList.remove("is-desktop-flipping");
+      bookStage.removeAttribute("aria-busy");
+      updateUI();
+    });
+  }
+
+  function goPrev() {
+    if (busy || pos <= 0) return;
+    if (mobile) {
+      pos--;
+      paintStatic();
+      updateUI();
+      return;
+    }
+
+    var prev = pos - 1;
+    var vCur = viewFromPos(pos);
+    var vPrev = viewFromPos(prev);
+    busy = true;
+    if (journalBook) journalBook.classList.add("is-desktop-flipping");
+    bookStage.setAttribute("aria-busy", "true");
+    updateUI();
+
+    setFlipLeafOriginDesktop();
+
+    fillPane("under", vPrev);
+    spreadUnder.classList.add("is-visible");
+
+    fillPane("flipFront", vPrev);
+    fillPane("flipBack", vCur);
+
+    resetFlipInstant(-180);
+    flipLeaf.classList.add("is-active");
+    flipLeaf.setAttribute("aria-hidden", "false");
+    flipInner.offsetHeight;
+    flipInner.style.transform = "rotateY(0deg)";
+
+    waitFlipEnd(function () {
+      pos = prev;
+      paintStatic();
+      spreadUnder.classList.remove("is-visible");
+      flipLeaf.classList.remove("is-active");
+      flipLeaf.setAttribute("aria-hidden", "true");
+      resetFlipInstant(0);
+      busy = false;
+      if (journalBook) journalBook.classList.remove("is-desktop-flipping");
+      bookStage.removeAttribute("aria-busy");
+      updateUI();
+    });
+  }
+
+  function onResizeMode() {
+    var wasMobile = mobile;
+    mobile = MQ.matches;
+    syncStageClass();
+    if (wasMobile !== mobile) {
+      if (mobile) {
+        /* was spread index → land on this spread’s left page */
+        pos = Math.min(leftPageFromSpread(pos) - 1, TOTAL_JPEGS - 1);
+        pos = Math.max(0, pos);
+      } else {
+        /* was single-page index → spread containing that page */
+        pos = Math.floor(pos / 2);
+        if (pos > SPREAD_COUNT - 1) pos = SPREAD_COUNT - 1;
+      }
+    }
+    paintStatic();
+    updateUI();
+  }
+
+  btnPrev.addEventListener("click", goPrev);
+  btnNext.addEventListener("click", goNext);
+
+  var touchStartX = null;
+  bookStage.addEventListener(
+    "touchstart",
+    function (e) {
+      if (e.changedTouches.length !== 1) return;
+      touchStartX = e.changedTouches[0].clientX;
+    },
+    { passive: true }
+  );
+  bookStage.addEventListener(
+    "touchend",
+    function (e) {
+      if (!mobile || busy || touchStartX == null) return;
+      if (e.changedTouches.length !== 1) return;
+      var x = e.changedTouches[0].clientX;
+      var dx = x - touchStartX;
+      touchStartX = null;
+      if (Math.abs(dx) < 56) return;
+      if (dx < 0) goNext();
+      else goPrev();
+    },
+    { passive: true }
+  );
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") goPrev();
+    else if (e.key === "ArrowRight") goNext();
+  });
+
+  if (MQ.addEventListener) {
+    MQ.addEventListener("change", onResizeMode);
+  } else {
+    MQ.addListener(onResizeMode);
+  }
+
+  syncStageClass();
+  pos = 0;
+  paintStatic();
+  updateUI();
+})();
+    </script>
+  </body>
+</html>
