@@ -180,6 +180,26 @@ body {
   color: var(--accent);
 }
 
+/* Journal index: same cover frame on every card, including a short last row */
+.journal-index .figure {
+  width: 100%;
+}
+
+.journal-index .figure > a {
+  display: block;
+  position: relative;
+  aspect-ratio: 1787 / 2313;
+  overflow: hidden;
+}
+
+.journal-index .figure > a > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Album gallery thumbnails (lightbox grid) */
 .container-fluid .row .col-sm a {
   display: block;
