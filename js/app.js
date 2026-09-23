@@ -53,6 +53,72 @@
     return String(seg || '').replace(/\.html?$/i, '');
   }
 
+  /** Resolve current page basename (no extension), e.g. index, peru_CHN, journal_rainforest. */
+  function currentPageKey() {
+    var path = '';
+    try {
+      path = decodeURIComponent(window.location.pathname || '').replace(/\\/g, '/');
+    } catch (e) {
+      path = (window.location.pathname || '').replace(/\\/g, '/');
+    }
+    var parts = path.split('/').filter(Boolean);
+    var basename = parts.length ? parts[parts.length - 1] : '';
+    basename = basename.split('?')[0].split('#')[0];
+    basename = stripHtmlExt(basename);
+    return basename || 'index';
+  }
+
+  /**
+   * Point ENG/CHN links at the matching language version of the current page
+   * (index.html <-> index_CHN.html, albums/peru.html <-> peru_CHN.html, etc.).
+   */
+  function wireLanguageSwitcher(container, prefix) {
+    if (!container || !container.querySelector) return;
+    var langRoot = container.querySelector('.site-nav-lang');
+    if (!langRoot) return;
+
+    var pageKey = currentPageKey();
+    var isChn = /_CHN$/i.test(pageKey);
+    var engKey = isChn ? pageKey.replace(/_CHN$/i, '') : pageKey;
+    var chnKey = engKey + '_CHN';
+    if (!engKey || engKey === 'index') {
+      engKey = 'index';
+      chnKey = 'index_CHN';
+    }
+
+    var p = typeof prefix === 'string' ? prefix : '';
+    // Album pages stay in /albums/; root pages stay at site root.
+    var inAlbumFolder = false;
+    try {
+      inAlbumFolder = (window.location.pathname || '').replace(/\\/g, '/').indexOf('/albums/') >= 0;
+    } catch (e) {}
+
+    var engHref;
+    var chnHref;
+    if (inAlbumFolder) {
+      engHref = engKey + '.html';
+      chnHref = chnKey + '.html';
+    } else {
+      engHref = p + engKey + '.html';
+      chnHref = p + chnKey + '.html';
+    }
+
+    var engLink = langRoot.querySelector('[data-lang="eng"]');
+    var chnLink = langRoot.querySelector('[data-lang="chn"]');
+    if (engLink) {
+      engLink.setAttribute('href', engHref);
+      engLink.classList.toggle('active', !isChn);
+      if (!isChn) engLink.setAttribute('aria-current', 'true');
+      else engLink.removeAttribute('aria-current');
+    }
+    if (chnLink) {
+      chnLink.setAttribute('href', chnHref);
+      chnLink.classList.toggle('active', isChn);
+      if (isChn) chnLink.setAttribute('aria-current', 'true');
+      else chnLink.removeAttribute('aria-current');
+    }
+  }
+
   /** Mark Home / About / Albums dropdown / Journal based on current pathname + link hrefs. */
   function highlightSiteNav(container, prefix) {
     if (!container || !container.querySelector) return;
@@ -158,11 +224,12 @@
     var explicitPrefix = el.getAttribute('data-nav-prefix');
     var prefix = explicitPrefix !== null ? explicitPrefix : navHrefPrefix();
     var url = base + nav;
-    fetch(url)
+    fetch(url, { cache: 'no-store' })
       .then(function (r) { return r.text(); })
       .then(function (html) {
         el.innerHTML = html;
         rewriteRelativeUrls(el, prefix);
+        wireLanguageSwitcher(el, prefix);
         highlightSiteNav(el, prefix);
       })
       .catch(function () {
